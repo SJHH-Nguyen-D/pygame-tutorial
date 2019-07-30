@@ -7,4 +7,7 @@ The tutorial entails some of the core components in creating a 2D game in python
 
 1. Create window, character and movement
 2. Jumping with a quadratic function
-3. 
+3. Character Animation and Sprites
+4. Optimization and OOP
+5. Projectiles
+6. Enemies
