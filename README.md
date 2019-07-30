@@ -1,3 +1,10 @@
 # pygame-tutorial
 A follow-along tutorial of the pygame module. For curiosity...science!
 
+## Overview
+
+The tutorial entails some of the core components in creating a 2D game in python. Similar to the Mario game in C for CS50.
+
+1. Create window, character and movement
+2. Jumping with a quadratic function
+3. 
