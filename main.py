@@ -2,16 +2,24 @@ import pygame
 pygame.init()
 
 # create a window with which the game will happen in with width and height of window
-win = pygame.display.set_mode((500, 500))
+screen_width = 500
+screen_height = 500
+win = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("First Game")
 
 # setting up character dimensions
 x = 50
-y = 50
+y = 450
 width = 40
 height = 60
-velocity = 5 # how fast our character moves
+velocity = 10 # how fast our character moves
+
+# jump code
+# use a quadratic function parabola to model a jump
+is_jump = False
+jump_count = 10
+
 
 # main loop for which the game will work through
 # usually all loops start with while
@@ -33,17 +41,39 @@ while run:
 	# bottom corners of the screen are not actually negative but they are considered positive.
 	keys = pygame.key.get_pressed()
 	
-	if keys[pygame.K_LEFT]:
+	# and if our character is moving left, we have to make sure that our character's position is 
+	# greater than 0, otherwise we would be moving off the screen
+	if keys[pygame.K_LEFT] and x > velocity:
 		x -= velocity
 
-	if keys[pygame.K_RIGHT]:
+	if keys[pygame.K_RIGHT] and x < screen_width-width-velocity:
 		x -= velocity
 
-	if keys[pygame.K_UP]:
-		y -= velocity
+	# no jumping in mid air or changing your trajectory during the jump
+	if not(is_jump):
+		if keys[pygame.K_UP] and y > velocity:
+			y -= velocity
 
-	if keys[pygame.K_DOWN]:
-		y += velocity
+		if keys[pygame.K_DOWN] and y < height-height-velocity:
+			y += velocity
+
+		if keys[pygame.K_SPACE]:
+			is_jump = True
+	# actually jumping
+	else:
+		# allow left and right during jump
+		# on the up stroke of our jump
+		if jump_count >= -10:
+			neg = 1
+			# on the down stroke of our jump
+			if jump_count < 0:
+				neg = -1
+			# move the character up by a certain number of pixels
+			y -= (jump_count **3) * 0.5 * neg
+			jump_count -= 1
+		else:
+			is_jump = False
+			jump_count = 10
 
 	win.fill((0, 0, 0))
 
