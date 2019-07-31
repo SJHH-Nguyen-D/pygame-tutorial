@@ -11,3 +11,6 @@ The tutorial entails some of the core components in creating a 2D game in python
 4. Optimization and OOP
 5. Projectiles
 6. Enemies
+7. Collision and Hitboxes
+8. Scoring and Health Bars
+9. Sound Effecs, Music and More Collision

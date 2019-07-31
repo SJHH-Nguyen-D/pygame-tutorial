@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 
+
 # a pygame always initializes with pygame.init()
 pygame.init()
 
@@ -27,7 +28,7 @@ class Player(object):
 		self.standing = True
 
 	def draw(self, win):
-		# 27 frames
+		# 27 frames = 3*9 char images
 		if self.walk_count + 1 >=27:
 			self.walk_count = 0
 
@@ -46,6 +47,49 @@ class Player(object):
 					win.blit(WALK_LEFT[0], (self.x, self.y))
 				else:
 					win.blit(CHAR, (self.x, self.y))
+
+class Enemy(Player):
+	""" enemy subclass """
+	
+	def __init__(self,  x, y, width, height, end):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.end = end
+		self.path = [self.x, self.end]
+		self.walk_count = 0
+		self.velocity = 3
+
+	def draw(self, win):
+		self.move()
+		# 33 frames because 11 enemy images * 3 instead of the the 9 images for character
+		if self.walk_count + 1 >=33:
+			self.walk_count = 0
+
+		# move right
+		if self.velocity > 0:
+			win.blit(WALK_RIGHT_ENEMY[self.walk_count//3], (self.x, self.y))
+			self.walk_count += 1
+		# move left
+		else:
+			win.blit(WALK_LEFT_ENEMY[self.walk_count//3], (self.x, self.y))
+			self.walk_count += 1
+		
+
+	def move(self):
+		if self.velocity > 0:
+			if self.x + self.velocity < self.path[1]:
+				self.x += self.velocity
+			else:
+				self.velocity *= self.velocity
+				self.walk_count = 0
+		else:
+			if self.x - self.velocity > self.path[0]:
+				self.x += self.velocity
+			else:
+				self.velocity *= self.velocity
+				self.walk_count = 0
 
 
 class Projectile(object):
@@ -68,6 +112,7 @@ def redraw_game_window():
 	# fill background with an image with 'background lit', followed by its position
 	win.blit(BG, (0, 0))
 	player.draw(win)
+	goblin.draw(win)
 	for bullet in bullets:
 		bullet.draw(win)
 
@@ -76,6 +121,7 @@ def redraw_game_window():
 
 # main loop for which the game will work through
 player = Player(300, 410, 64, 64)
+goblin = Enemy(100, 410, 64, 64, end=450)
 bullets = list()
 run = True
 while run:
